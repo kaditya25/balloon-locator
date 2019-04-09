@@ -1,7 +1,7 @@
 # Lab 5
 
 ## Running the code
-First, build the code.
+First, build the code:
 ```bash
 mkdir build
 cd build
@@ -9,8 +9,9 @@ cmake ..
 make
 ```
 
-The executable is but in the exe directory. It requires one input: the path to an
-image to display.
+The executable, which after the build process is located in the exe directory, 
+requires one input: the path to an image to display.  Run the executable
+as follows:
 ```bash
 cd exe
 ./lab5 ../images/frame00077.jpg

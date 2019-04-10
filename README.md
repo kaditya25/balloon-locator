@@ -1,7 +1,7 @@
 # Lab 5
 
 ## Running the code
-First, build the code:
+First build the code:
 ```bash
 mkdir build
 cd build
@@ -14,7 +14,7 @@ requires one input: the path to an image to display.  Run the executable
 as follows:
 ```bash
 cd exe
-./lab5 ../images/frame00077.jpg
+./locateBalloon ../images/frame00077.jpg
 ```
 
 ## Resources

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
-project(lab5)
+project(locateBalloon)
 set(CMAKE_CXX_STANDARD 14)
 
 set(default_build_type "Release")

@@ -23,7 +23,7 @@ struct Point {
   // 3x1 estimated location of the feature point expressed in I in meters
   Eigen::Vector3d rXIHat;
   // 3x3 error covariance matrix for the estimate rxIHat
-  Eigen::Matrix3d Re;
+  Eigen::Matrix3d Px;
   // Macro that ensures proper aligment of Eigen objects in struct
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };

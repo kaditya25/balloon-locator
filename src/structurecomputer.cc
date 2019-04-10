@@ -3,7 +3,7 @@
 void StructureComputer::clear() {
   // Zero out contents of point_
   point_.rXIHat.fill(0);
-  point_.Re.fill(0);
+  point_.Px.fill(0);
   // Clear bundleVec_
   bundleVec_.clear();
 }
@@ -25,7 +25,7 @@ Point StructureComputer::computeStructure() {
 
   // Fill in below the required steps to calculate the 3D position of the
   // feature point and its covariance.  Put these respectively in
-  // point_.rXIHat and point_.Re
+  // point_.rXIHat and point_.Px
 
 
   

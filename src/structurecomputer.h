@@ -9,13 +9,14 @@ struct CameraBundle {
   // 2x1 coordinates of feature point as projected on the camera's image
   // plane, in pixels.
   Eigen::Vector2d rx;
-  double tmp;
   // 3x3 attitude matrix relating the C and I frames at the instant the image
   // was taken.
   Eigen::Matrix3d RCI;
   // 3x1 position of the camera center at the instant the image was taken,
   // expressed in the I frame in meters.
   Eigen::Vector3d rc;
+  // Macro that ensures proper aligment of Eigen objects in struct
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 struct Point {
@@ -23,6 +24,8 @@ struct Point {
   Eigen::Vector3d rXIHat;
   // 3x3 error covariance matrix for the estimate rxIHat
   Eigen::Matrix3d Re;
+  // Macro that ensures proper aligment of Eigen objects in struct
+  EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 class StructureComputer {

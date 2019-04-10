@@ -31,13 +31,26 @@ int main(int argc, char** argv) {
   cb1->rx << 23, 56;
   cb1->RCI.fill(3);
   cb1->rc(0) = 1;  cb1->rc(1) = 0.4;
-  // Clear out structureComputer to put it in a known initial state.
+  // Clear out structureComputer
   structureComputer.clear();
   // Push cb1 and cb2 to structureComputer
   structureComputer.push(cb1);
   structureComputer.push(cb2);
-  // Estimate 3D location of feature
-  Point p1 = structureComputer.computeStructure();  
+  // Estimate 3D location of feature.  The try and catch blocks are for
+  // exception handling -- they handle any errors that might be thrown during
+  // a call to computeStructure().  You can use this to cover any portion of
+  // your code in main.cc.
+  try {
+    Point p1 = structureComputer.computeStructure();
+  }
+  catch(std::exception& e) {
+    std::cout << "Error: " << e.what() << std::endl;
+    return EXIT_FAILURE;
+  }
+  catch(...) {
+    std::cout << "Unhandled error" << std::endl;
+    return EXIT_FAILURE;
+  }
 
   // Display an image
   cv::Mat image = cv::imread(std::string(argv[1]));
@@ -51,3 +64,6 @@ int main(int argc, char** argv) {
   cv::waitKey(0);
   return EXIT_SUCCESS;
 }
+
+
+

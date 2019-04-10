@@ -11,3 +11,4 @@ set_target_properties( ${TARGET}
   PROPERTIES
   RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/exe"
 )
+

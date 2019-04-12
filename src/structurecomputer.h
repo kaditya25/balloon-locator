@@ -5,6 +5,8 @@
 #include <cstdlib>
 #include <memory>
 
+#include "sensorparams.h"
+
 struct CameraBundle {
   // 2x1 coordinates of feature point as projected on the camera's image
   // plane, in pixels.
@@ -44,6 +46,8 @@ public:
   Point point() { return point_; }
   
 private:
+  SensorParams sensorParams_;
+  // The Point object estimated from the CameraBundle objects in bundleVec_
   Point point_;
   // Vector of pointers to CameraBundle objects all corresponding to the same
   // 3d feature

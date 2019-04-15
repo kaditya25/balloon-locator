@@ -13,3 +13,4 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 add_subdirectory(src)
+add_subdirectory(opencv-lecture)

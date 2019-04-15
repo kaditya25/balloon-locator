@@ -7,6 +7,7 @@ file(GLOB HEADER_FILES ./*.h)
 include_directories(${OpenCV_INCLUDE_DIRS})
 add_executable(${TARGET}
         structurecomputer.cc
+        balloonfinder.cc    
         main.cc
         ${HEADER_FILES})
 target_link_libraries(${TARGET} ${OpenCV_LIBS} Eigen3::Eigen)

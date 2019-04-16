@@ -1,7 +1,7 @@
 # Lab 5
 
 ## Running the code
-First build the code:
+In the lab5-aerial-robotics directory, do the following to build the code:
 ```bash
 mkdir build
 cd build

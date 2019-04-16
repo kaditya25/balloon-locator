@@ -9,7 +9,7 @@ cmake ..
 make
 ```
 
-The executable, which after the build process is located in the exe directory, 
+The `locateBalloon` executable, which after the build process is located in the exe directory, 
 requires one input: the path to an image to display.  Run the executable
 as follows:
 ```bash

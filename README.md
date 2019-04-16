@@ -1,7 +1,7 @@
 # Lab 5
 
 ## Running the code
-First build the code:
+In the lab5-aerial-robotics directory, do the following to build the code:
 ```bash
 mkdir build
 cd build
@@ -9,7 +9,7 @@ cmake ..
 make
 ```
 
-The executable, which after the build process is located in the exe directory, 
+The `locateBalloon` executable, which after the build process is located in the exe directory, 
 requires one input: the path to an image to display.  Run the executable
 as follows:
 ```bash

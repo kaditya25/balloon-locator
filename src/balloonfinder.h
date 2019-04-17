@@ -10,11 +10,11 @@
 #include "structurecomputer.h"
 
 class BalloonFinder {
+public:
   enum BalloonColor {
     RED,
     BLUE
   };
-public:
   // Constructor: gets called when an instance of BalloonFinder is created
   BalloonFinder() {}
   // Destructor: gets called when an instance of BalloonFinder is destroyed

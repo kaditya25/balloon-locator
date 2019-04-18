@@ -27,12 +27,17 @@ int main(int argc, char** argv) {
     camera >> frame;
     // Blur the image to reduce small-scale noise
     GaussianBlur(frame, framep, Size(11,11), 0, 0);
-    // Convert the image from the original BGR color space to HSV, which
+    // Convert the image from the original BGR color space to HSV, which is
     // easier to segment based on color: color is encoded only in H.
     cvtColor(framep, framep, COLOR_BGR2HSV);
-    // Filter only red
-    Scalar redLower(150,100,100);
-    Scalar redUpper(200,255,255);
+    // Filter only red: H goes from 0 to 180 and is circular, with the usual
+    // 0-to-360 circle mapped to 0-to-180.  Red sits between -10 and 10, or in
+    // positive units (which inRange expects), between 170 and 10.  S
+    // (saturation, a measure of color purity) and V (value, a measure of
+    // intensity) go from 0 to 255.  The code below only gets half of the red
+    // interval, but this seems to be adequate in this case.
+    Scalar redLower(170,100,100);
+    Scalar redUpper(180,255,255);
     inRange(framep, redLower, redUpper, framep);
     // Erode image to eliminate stray wisps of red
     const int iterations = 5;

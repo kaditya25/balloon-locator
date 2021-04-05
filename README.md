@@ -1,7 +1,7 @@
 # Lab 5
 
 ## Cloning the repo
-In a directory of your choice (e.g., ''~/Workspace''), do the following:
+In a directory of your choice (e.g., `~/Workspace`), do the following:
 ```bash
 git clone https://gitlab.com/todd.humphreys/lab5-aerial-robotics.git
 ```

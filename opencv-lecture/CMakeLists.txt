@@ -1,6 +1,6 @@
 set(TARGET opencv_demo)
 
-find_package(OpenCV 4.0.1 REQUIRED)
+find_package(OpenCV 4.2.0 REQUIRED)
 find_package(Eigen3 3.3 NO_MODULE)
 file(GLOB HEADER_FILES ./*.h)
 

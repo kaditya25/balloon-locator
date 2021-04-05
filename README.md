@@ -25,5 +25,5 @@ cd exe
 ```
 
 ## Resources
-- [OpenCV 4.0.1 Documentation](https://docs.opencv.org/4.0.1/)
+- [OpenCV 4.2.0 Documentation](https://docs.opencv.org/4.2.0/)
 - [Eigen Documentation](http://eigen.tuxfamily.org/dox/)

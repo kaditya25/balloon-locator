@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <string>
 #include <iostream>
+#include <fstream>
 #include <Eigen/Dense>
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
@@ -8,8 +9,8 @@
 int main(int argc, char** argv) {
 
   // Construct and manipulate Eigen objects
-  VectorXd b, x;
-  MatrixXd A;
+  Eigen::VectorXd b, x;
+  Eigen::MatrixXd A;
   b.resize(3,1);
   b(0) = 4;
   b(1) = 10;

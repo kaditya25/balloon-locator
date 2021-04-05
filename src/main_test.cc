@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <string>
 #include <iostream>
+#include <fstream>
 #include <Eigen/Dense>
 #include <opencv2/opencv.hpp>
 

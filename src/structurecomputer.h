@@ -4,6 +4,7 @@
 #include <Eigen/Dense>
 #include <cstdlib>
 #include <memory>
+#include <vector>
 
 #include "sensorparams.h"
 

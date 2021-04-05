@@ -5,13 +5,11 @@
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 
-#include "structurecomputer.h"
-
 int main(int argc, char** argv) {
 
   // Construct and manipulate Eigen objects
-  Eigen::VectorXd b, x;
-  Eigen::MatrixXd A;
+  VectorXd b, x;
+  MatrixXd A;
   b.resize(3,1);
   b(0) = 4;
   b(1) = 10;
@@ -20,37 +18,6 @@ int main(int argc, char** argv) {
   // Solve an equation of the form b = A*x for x
   x = A.colPivHouseholderQr().solve(b);
   std::cout << "The solution is \n" << x << std::endl;
-
-  // Create an instance of a StructureComputer object
-  StructureComputer structureComputer;
-  // Create shared pointers to two CameraBundle objects.  The make_shared
-  // function creates the objects and returns a shared pointer to each. 
-  std::shared_ptr<CameraBundle> cb1 = std::make_shared<CameraBundle>();
-  std::shared_ptr<CameraBundle> cb2 = std::make_shared<CameraBundle>();
-  // Fill cb1's and cb2's data members with example contents.  
-  cb1->rx << 23, 56;
-  cb1->RCI.fill(3);
-  cb1->rc(0) = 1;  cb1->rc(1) = 0.4;
-  // Clear out structureComputer
-  structureComputer.clear();
-  // Push cb1 and cb2 to structureComputer
-  structureComputer.push(cb1);
-  structureComputer.push(cb2);
-  // Estimate 3D location of feature.  The try and catch blocks are for
-  // exception handling -- they handle any errors that might be thrown during
-  // a call to computeStructure().  You can use this to cover any portion of
-  // your code in main.cc.
-  try {
-    Point p1 = structureComputer.computeStructure();
-  }
-  catch(std::exception& e) {
-    std::cout << "Error: " << e.what() << std::endl;
-    return EXIT_FAILURE;
-  }
-  catch(...) {
-    std::cout << "Unhandled error" << std::endl;
-    return EXIT_FAILURE;
-  }
 
   // Display an image
   cv::Mat image = cv::imread(std::string(argv[1]));
@@ -64,6 +31,3 @@ int main(int argc, char** argv) {
   cv::waitKey(0);
   return EXIT_SUCCESS;
 }
-
-
-

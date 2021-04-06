@@ -25,14 +25,18 @@ int main(int argc, char** argv) {
   while(1) {
     Mat frame;
     // Grab next frame from camera
-    camera >> frame;
+    bool read_success = camera.read(frame);
+    // Break out of while loop if no more frames to read
+    if(!read_success) {
+      break;
+    }
     // Blur the image to reduce small-scale noise
     GaussianBlur(frame, framep, Size(11,11), 0, 0);
     // Convert the image from the original BGR color space to HSV, which is
     // easier to segment based on color: color is encoded only in H.
     cvtColor(framep, framep, COLOR_BGR2HSV);
-    // Filter only red: H goes from 0 to 180 and is circular, with the usual
-    // 0-to-360 circle mapped to 0-to-180.  Red sits between -10 and 10, or in
+    // Filter only red: H goes from 0 to 179 and is circular, with the usual
+    // 0-to-359 circle mapped to 0-to-179.  Red sits between -10 and 10, or in
     // positive units (which inRange expects), between 170 and 10.  S
     // (saturation, a measure of color purity) and V (value, a measure of
     // intensity) go from 0 to 255.  The code below only gets half of the red
@@ -78,7 +82,7 @@ int main(int argc, char** argv) {
         circle(frame, center, (int)radius, color, 2);
       }
     }
-    imshow("Image", frame);
+    imshow("Image", framep);
     int keycode = waitKey(0);
     // Quit on 'q'
     if(keycode == 'q') break;

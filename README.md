@@ -16,12 +16,19 @@ cmake ..
 make
 ```
 
-The `locateBalloon` executable, which after the build process is located in the exe directory, 
-requires one input: the path to an image to display.  Run the executable
-as follows:
+The `locateBalloon` executable, which after the build process is located in
+the exe directory, requires one input: the path to an image to display.  Run
+the executable as follows:
 ```bash
 cd exe
 ./locateBalloon ../images/frame00077.jpg
+```
+
+The `opencv_demo` executable, which after the build process is located in
+the exe directory, can be run as follows:
+```bash
+cd opencv-lecture
+../exe/opencv_demo
 ```
 
 ## Resources

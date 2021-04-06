@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <string>
 #include <iostream>
+#include <fstream>
 #include <Eigen/Dense>
 #include <opencv2/opencv.hpp>
 
@@ -16,7 +17,6 @@ int main(int argc, char** argv) {
     std::cout << "Failed to open " << filename << std::endl; 
     return EXIT_FAILURE;
   }
-
 
   return EXIT_SUCCESS;
 }

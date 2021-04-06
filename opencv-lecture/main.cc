@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <string>
 #include <iostream>
+#include <fstream>
 #include <Eigen/Dense>
 #include <opencv2/opencv.hpp>
 
@@ -24,7 +25,11 @@ int main(int argc, char** argv) {
   while(1) {
     Mat frame;
     // Grab next frame from camera
-    camera >> frame;
+    bool read_success = camera.read(frame);
+    // Break out of while loop if no more frames to read
+    if(!read_success) {
+      break;
+    }
     // Blur the image to reduce small-scale noise
     GaussianBlur(frame, framep, Size(11,11), 0, 0);
     // Convert the image from the original BGR color space to HSV, which is
@@ -76,8 +81,8 @@ int main(int argc, char** argv) {
       if(aspectRatio < maxAspectRatio && radius > minRadius) {
         circle(frame, center, (int)radius, color, 2);
       }
-    }
-    imshow("Image", frame);
+    }*/
+    imshow("Image", framep);
     int keycode = waitKey(0);
     // Quit on 'q'
     if(keycode == 'q') break;

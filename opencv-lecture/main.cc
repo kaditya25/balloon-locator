@@ -18,31 +18,6 @@ int main(int argc, char** argv) {
     return EXIT_FAILURE;
   }
 
-  // Process the video file and track the red square
-  // Processed image frame
-  Mat framep;
-  namedWindow("Image", WINDOW_AUTOSIZE);
-  while(1) {
-    Mat frame;
-    // Grab next frame from camera
-    bool read_success = camera.read(frame);
-    // Break out of the while loop if no more frames to read
-    if(!read_success) {
-      break;
-    }
-    // Blur the image to reduce small-scale noise
-    GaussianBlur(frame, framep, Size(11,11), 0, 0);
-    
-    // Examine our image
-    imshow("Image", framep);
-    int keycode = waitKey(0);
-
-    // Quit on 'q'
-    if(keycode == 'q') {
-      break;
-    }
-  }
-
   return EXIT_SUCCESS;
 }
 

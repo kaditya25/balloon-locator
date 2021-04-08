@@ -36,6 +36,7 @@ int main(int argc, char** argv) {
     // Take a look at our image
     imshow("Image", framep);
     int keycode = waitKey(0);
+    
     // Quit on 'q'
     if(keycode == 'q') {
       break;

@@ -4,7 +4,6 @@
 In a directory of your choice (e.g., `~/Workspace`), do the following:
 ```bash
 git clone https://gitlab.com/todd.humphreys/lab5-aerial-robotics.git
-cd lab5-aerial-robotics
 ```
 
 ## Running the code
@@ -17,7 +16,7 @@ make
 ```
 
 The `locateBalloon` executable, which after the build process is located in
-the exe directory, requires one input: the path to an image to display.  Run
+the `exe` directory, requires one input: the path to an image to display.  Run
 the executable as follows:
 ```bash
 cd exe
@@ -25,7 +24,7 @@ cd exe
 ```
 
 The `opencv_demo` executable, which after the build process is located in
-the exe directory, can be run as follows:
+the `exe` directory, can be run as follows:
 ```bash
 cd opencv-lecture
 ../exe/opencv_demo

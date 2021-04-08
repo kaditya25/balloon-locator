@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
     // Blur the image to reduce small-scale noise
     GaussianBlur(frame, framep, Size(11,11), 0, 0);
     
-    // Take a look at our image
+    // Examine our image
     imshow("Image", framep);
     int keycode = waitKey(0);
 

@@ -36,13 +36,13 @@ int main(int argc, char** argv) {
     // easier to segment based on color: color is encoded only in H.
     cvtColor(framep, framep, COLOR_BGR2HSV);
     // Filter only red: H goes from 0 to 179 and is circular, with the usual
-    // 0-to-359 circle mapped to 0-to-179.  Red sits between -10 and 10, or in
-    // positive units (which inRange expects), between 170 and 10.  S
+    // 0-to-359-degree circle mapped to 0-to-179.  Red sits between -10 and
+    // 10, or in positive units (which the function inRange expects), between
+    // 170 and 190 (the upper value must be greater than the lower value).  S
     // (saturation, a measure of color purity) and V (value, a measure of
-    // intensity) go from 0 to 255.  The code below only gets half of the red
-    // interval, but this seems to be adequate in this case.
+    // intensity) go from 0 to 255.
     Scalar redLower(170,100,100);
-    Scalar redUpper(180,255,255);
+    Scalar redUpper(190,255,255);
     inRange(framep, redLower, redUpper, framep);
     // Erode image to eliminate stray wisps of red
     const int iterations = 5;
@@ -58,7 +58,6 @@ int main(int argc, char** argv) {
     // on the original image. If the bounding rectangle indicates that the
     // contour is square enough, and if the enclosing circle indicates it's
     // large enough, then also draw the minimum enclosing circle.
-    Mat drawing = Mat::zeros(framep.size(), CV_8UC3);
     RNG rng(12345);
     Point2f center;
     float radius;
@@ -76,13 +75,15 @@ int main(int argc, char** argv) {
         aspectRatio = static_cast<float>(std::max(rectSize.width,rectSize.height))/
           std::min(rectSize.width,rectSize.height);
       }
-      std::cout << aspectRatio << " " << radius << std::endl;
-      drawContours(frame, contours, ii, color, 2, LINE_8, hierarchy, 0);
+      std::cout << "ar: " << aspectRatio << " " << "rad: "
+                << radius << std::endl;
+      drawContours(framep, contours, ii, color, 2, LINE_8, hierarchy, 0);
       if(aspectRatio < maxAspectRatio && radius > minRadius) {
         circle(frame, center, (int)radius, color, 2);
       }
     }
-    imshow("Image", framep);
+    // Display image
+    imshow("Image", frame);
     int keycode = waitKey(0);
     // Quit on 'q'
     if(keycode == 'q') break;

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <Eigen/Dense>
+#include "definitions.h"
 
 class SensorParams {
 public:

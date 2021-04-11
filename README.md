@@ -6,21 +6,54 @@ In a directory of your choice (e.g., `~/Workspace`), do the following:
 git clone https://gitlab.com/todd.humphreys/lab5-aerial-robotics.git
 ```
 
-## Running the code
-In the lab5-aerial-robotics directory, do the following to build the code:
+## Install
+### Clone and rename to balloon-locator
 ```bash
-mkdir build
-cd build
-cmake ..
-make
+git clone https://gitlab.com/todd.humphreys/lab5-solution-aerial-robotics.git
+git submodule update --init recursive
 ```
 
-The `locateBalloon` executable, which after the build process is located in
-the `exe` directory, requires one input: the path to an image to display.  Run
-the executable as follows:
+### Build
+```bash
+mkdir build 
+cd build
+cmake ..
+make -j4
+```
+
+### Download balloon images and metadata
+```bash
+cd images
+wget http://radionavlab.ae.utexas.edu/datastore/aerialRobotics/easy-ones.tar .
+tar xf easy-ones.tar
+```
+
+## Execute
+The initial version of the `locateBalloon` executable, which after the build
+process is located in the `exe` directory, requires one input: the path to an
+image to display.  Run the executable as follows:
 ```bash
 cd exe
-./locateBalloon ../images/frame00077.jpg
+./locateBalloon ../images/easy-ones/frame00090.jpg
+```
+
+The full version of the `locateBalloon` executable (with `main.cc` copied from
+`main_full.cc`), which after the build process is located in the `exe`
+directory, requires one input: the path to a directory containing a set of
+images and a metadata file named `metadata.log`.  Run the executable as
+follows:
+```bash
+cd exe
+./locateBalloon -i ../images/easy-ones
+```
+
+If you would like to enable the dubugging mode, in which each image is
+displayed with contours, along with text information on the aspect ratio,
+size, and location of the enclosing rectangle and circle, then tack on a '-d'
+at the end of the execution command:
+
+```bash
+./locateBalloon -i ../images/easy-ones -d
 ```
 
 The `opencv_demo` executable, which after the build process is located in

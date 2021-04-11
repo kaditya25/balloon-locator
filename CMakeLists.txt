@@ -12,5 +12,6 @@ if(NOT CMAKE_BUILD_TYPE)
     "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
+add_subdirectory(navtoolbox)
 add_subdirectory(src)
 add_subdirectory(opencv-lecture)

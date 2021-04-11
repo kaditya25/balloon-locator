@@ -1,4 +1,68 @@
+#include <cassert>
+#include <Eigen/Dense>
+#include <opencv2/core/eigen.hpp>
+
 #include "balloonfinder.h"
+#include "navtoolbox.h"
+
+BalloonFinder::BalloonFinder(bool debuggingEnabled, bool calibrationEnabled,
+                const Eigen::Vector3d& blueTrue_I,
+                const Eigen::Vector3d& redTrue_I) {
+  debuggingEnabled_ = debuggingEnabled;
+  calibrationEnabled_ = calibrationEnabled;
+  blueTrue_I_ = blueTrue_I;
+  redTrue_I_ = redTrue_I;
+  V_.resize(3,0);
+  W_.resize(3,0);
+}
+
+// Returns true if the input contour touches the edge of the input image;
+// otherwise returns false.
+//
+bool touchesEdge(const cv::Mat& image,
+                 const std::vector<cv::Point>& contour) {
+
+  const size_t borderWidth = static_cast<size_t>(0.01*image.rows);
+
+  for(const auto& pt : contour) {
+    if(pt.x <= borderWidth || pt.x >= (image.cols - borderWidth) ||
+       pt.y <= borderWidth || pt.y >= (image.rows - borderWidth))
+      return true;
+  }
+  return false;
+}
+
+Eigen::Vector3d BalloonFinder::eCB_calibrated() const {
+
+  using namespace Eigen;
+  SensorParams sp;
+  const size_t N = V_.cols();
+  if(N < 2 || !calibrationEnabled_) {
+    return MatrixXd::Identity(3,3);
+  }
+  MatrixXd aVec = MatrixXd::Ones(N,1);
+  Matrix3d dRCB = navtbx::wahbaSolver(aVec,W_,V_);
+  Matrix3d RCB = navtbx::euler2dc(sp.eCB());
+  std::cout << "Calibration correction deCB (deg): "
+            << navtbx::dc2euler(dRCB).transpose()*180/PI << std::endl;
+  return navtbx::dc2euler(dRCB*RCB);
+}
+
+bool BalloonFinder::
+findBalloonsOfSpecifiedColor(const cv::Mat* image,
+                             const Eigen::Matrix3d RCI,
+                             const Eigen::Vector3d rc,
+                             const BalloonFinder::BalloonColor color,
+                             std::vector<Eigen::Vector2d>* rxVec) {
+  using namespace cv;
+  bool returnValue = false;
+  rxVec->clear();
+
+  // Implement the rest of the function here.
+
+  
+  return returnValue;
+}
 
 void BalloonFinder::
 findBalloons(const cv::Mat* image,
@@ -7,8 +71,34 @@ findBalloons(const cv::Mat* image,
              std::vector<std::shared_ptr<const CameraBundle>>* bundles,
              std::vector<BalloonColor>* colors) {
 
-  // Implement the function here
-
-
-
+  // Crop image to 4k size.  This removes the bottom 16 rows of the image,
+  // which are an artifact of the camera API.
+  const cv::Rect croppedRegion(0,0,sensorParams_.imageWidthPixels(),
+                               sensorParams_.imageHeightPixels());
+  cv::Mat croppedImage = (*image)(croppedRegion);
+  // Convert camera instrinsic matrix K and distortion parameters to OpenCV
+  // format
+  cv::Mat K, distortionCoeffs, undistortedImage;
+  Eigen::Matrix3d Kpixels = sensorParams_.K()/sensorParams_.pixelSize();
+  Kpixels(2,2) = 1;
+  cv::eigen2cv(Kpixels, K);
+  cv::eigen2cv(sensorParams_.distortionCoeffs(),distortionCoeffs);
+  // Undistort image
+  cv::undistort(croppedImage, undistortedImage, K, distortionCoeffs);
+    
+  // Find balloons of specified color
+  std::vector<BalloonColor> candidateColors = {RED, BLUE};
+  for(auto color : candidateColors) {
+    std::vector<Eigen::Vector2d> rxVec;
+    if(findBalloonsOfSpecifiedColor(&undistortedImage,RCI,rc,color,&rxVec)) {
+      for(const auto& rx : rxVec) {
+        std::shared_ptr<CameraBundle> cb = std::make_shared<CameraBundle>();
+        cb->RCI = RCI;
+        cb->rc = rc;
+        cb->rx = rx;
+        bundles->push_back(cb);
+        colors->push_back(color);
+      }
+    }
+  }
 }

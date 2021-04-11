@@ -10,7 +10,13 @@
 
 struct CameraBundle {
   // 2x1 coordinates of feature point as projected on the camera's image
-  // plane, in pixels.
+  // plane, in pixels.  Note that the camera's image plane coordinate system
+  // has its origin at the lower right corner of the image, its x axis
+  // pointing to the *left* as seen from the camera center out through the
+  // image plane, its z axis pointing along the boresight of the camera, and
+  // its y axis pointing up, completing the right-handed triad.  This means
+  // that x coodinates in the image plane increase to the *left* and y
+  // coordinates increase *up*.
   Eigen::Vector2d rx;
   // 3x3 attitude matrix relating the C and I frames at the instant the image
   // was taken.
@@ -54,4 +60,27 @@ private:
   // 3d feature
   std::vector<std::shared_ptr<const CameraBundle>> bundleVec_;
 };
+
+// Back-projects the 3D point X3d (expressed in the I frame) onto the image
+// plane of the camera whose attitude and position with respect to the I frame
+// are specified by RCI and rc_I, respectively.  Returns a 2-by-1 vector
+// projection of X3d onto the image plane, expressed in pixels.
+//
+Eigen::Vector2d backProject(const Eigen::Matrix3d& RCI,
+                            const Eigen::Vector3d& rc_I,
+                            const Eigen::Vector3d& X3d);
+
+// Returns the unit vector, in the camera frame, pointing from the camera
+// origin through the coordinate rPixels (expressed in pixels) on the camera's
+// image plane.
+//
+Eigen::Vector3d pixelsToUnitVector_C(const Eigen::Vector2d& rPixels);
+
+// Functions for easy printing in gdb
+void pr(Eigen::MatrixXd m);
+void pr(Eigen::VectorXd m);
+void pr(Eigen::Matrix3d m);
+void pr(Eigen::Vector3d m);
+void pr(Eigen::Vector2d m);
+
 #endif

@@ -16,7 +16,9 @@ public:
     BLUE
   };
   // Constructor: gets called when an instance of BalloonFinder is created
-  BalloonFinder() {}
+  BalloonFinder(bool debuggingEnabled, bool calibrationEnabled,
+                const Eigen::Vector3d& blueTrue_I,
+                const Eigen::Vector3d& redTrue_I);
   // Destructor: gets called when an instance of BalloonFinder is destroyed
   ~BalloonFinder() {}
   // Takes in a pointer to an image and outputs a pointer to an N-by-1 vector
@@ -34,8 +36,42 @@ public:
                     const Eigen::Vector3d rc,
                     std::vector<std::shared_ptr<const CameraBundle>>* bundles,
                     std::vector<BalloonColor>* colors);
+  // Takes in a pointer to an image and a specified balloon color and returns
+  // true if a balloon or multiple balloons of that color were found in the
+  // image.  The centers of the found balloons are returned in rxVec, in
+  // pixels. Note that the coordinates in rxVec are expressed in the camera's
+  // image plane coordinate system, which has the x axis pointing to the *left*
+  // as seen from the camera center out through the image plane, and y axis
+  // pointing up.  Returns false if no balloon of the specified color were
+  // found.  RCI and rc are input for debugging purposes. 
+  bool findBalloonsOfSpecifiedColor(const cv::Mat* image,
+                                    const Eigen::Matrix3d RCI,
+                                    const Eigen::Vector3d rc,
+                                    const BalloonFinder::BalloonColor color,
+                                    std::vector<Eigen::Vector2d>* rxVec);
+  // Returns the updated eCB 312 Euler angles relating the C and B frames
+  // after extrinsic camera calibration.  Let the 3x3 matrix RCB be the
+  // assumed B-to-C attitude matrix in the SensorParams object.  Then the
+  // calibrated matrix RCB_calibrated = dRCB*RCB.  eCB_calibrated holds the
+  // Euler angles corresponding to RCB_calibrated.
+  Eigen::Vector3d eCB_calibrated() const;
 
 private:
   SensorParams sensorParams_;
+  // Indicates whether interactive debugging is enabled
+  bool debuggingEnabled_;
+  // Indicates whether camera extrinsic calibratio is enabled
+  bool calibrationEnabled_;
+  // True location of center of blue balloon in I frame in meters
+  Eigen::Vector3d blueTrue_I_;
+  // True location of center of red balloon in I frame in meters
+  Eigen::Vector3d redTrue_I_;
+  // Matrices used in determining the calibration matrix dRCB: V_ holds as
+  // columns the unit vectors in the C frame derived from the actual locations
+  // of features on the image plane, whereas W_ holds the unit vectors in the
+  // C frame derived from back-projecting the known 3d coordinates
+  // corresponding to the features.  These are related to dRCB by V_ =
+  // dRCB*W_.
+  Eigen::MatrixXd V_, W_;
 };
 #endif

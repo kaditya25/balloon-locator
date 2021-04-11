@@ -1,0 +1,3 @@
+[submodule "navtoolbox"]
+	path = navtoolbox
+	url = https://gitlab.com/radionavlab/public/navtoolbox.git

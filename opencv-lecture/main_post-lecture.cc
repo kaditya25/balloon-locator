@@ -35,16 +35,18 @@ int main(int argc, char** argv) {
     // Convert the image from the original BGR color space to HSV, which is
     // easier to segment based on color: color is encoded only in H.
     cvtColor(framep, framep, COLOR_BGR2HSV);
-    // Filter only red: H goes from 0 to 179 and is circular, with the usual
-    // 0-to-359-degree circle mapped to 0-to-179.  Red sits between -10 and
-    // 10, or in non-negative units (which the function inRange expects),
-    // between 170 and 190 (190 gets mapped to 10, but we use 190 because the
-    // upper range is required to be no less than the lower range).  S
-    // (saturation, a measure of color purity), and V (value, a measure of
-    // intensity), range from 0 to 255.
-    Scalar redLower(170, 100, 100);
-    Scalar redUpper(190, 255, 255);
-    inRange(framep, redLower, redUpper, framep);
+    // Filter only red: H goes from 0 to 180 and is circular, with the usual
+    // 0-to-360 circle mapped to 0-to-180.  Red sits between -10 and 10, or in
+    // positive units (which inRange expects), between 170 and 10.  Because
+    // red straddles the 0 boundary, we apply two maskings and bitwise 'or'
+    // the results, as shown below.  S (saturation, a measure of color purity)
+    // and V (value, a measure of intensity) go from 0 to 255.
+    Scalar colorLower_l(0,120,100), colorLower_h(10,255,255);
+    Scalar colorUpper_l(170,120,100), colorUpper_h(180,255,255);
+    Mat mLower, mUpper;
+    inRange(framep, colorLower_l, colorLower_h, mLower);
+    inRange(framep, colorUpper_l, colorUpper_h, mUpper);
+    framep = mLower | mUpper;
     // Erode image to eliminate stray wisps of red
     constexpr int iterations = 5;
     erode(framep, framep, Mat(), Point(-1,-1), iterations);

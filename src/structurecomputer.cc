@@ -22,7 +22,6 @@ Eigen::Vector2d backProject(const Eigen::Matrix3d& RCI,
                             const Eigen::Vector3d& rc_I,
                             const Eigen::Vector3d& X3d) {
   using namespace Eigen;
-  
   Vector3d t = -RCI*rc_I;
   MatrixXd Pextrinsic(3,4);
   Pextrinsic << RCI, t;
@@ -74,14 +73,15 @@ Point StructureComputer::computeStructure() {
   // Throw an error if there are fewer than 2 CameraBundles in bundleVec_,
   // since in this case structure computation is not possible.
   if(bundleVec_.size() < 2) {
-    throw std::runtime_error("At least 2 CameraBundle objects are needed for structure computation.");
+    throw std::runtime_error("At least 2 CameraBundle objects are "
+                             "needed for structure computation.");
   }
 
-  // ******************************************************************************
+  // *********************************************************************
   // Fill in here the required steps to calculate the 3D position of the
   // feature point and its covariance.  Put these respectively in
   // point_.rXIHat and point_.Px
-  // ******************************************************************************
+  // *********************************************************************
 
   return point_;
 }

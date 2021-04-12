@@ -4,7 +4,7 @@
 ### Clone 
 ```bash
 cd ~Workspace
-git clone https://gitlab.com/todd.humphreys/lab5-solution-aerial-robotics.git
+git clone https://gitlab.com/todd.humphreys/lab5-aerial-robotics.git
 git submodule update --init recursive
 ```
 

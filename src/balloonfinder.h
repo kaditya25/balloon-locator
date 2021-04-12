@@ -11,7 +11,7 @@
 
 class BalloonFinder {
 public:
-  enum BalloonColor {
+  enum class BalloonColor {
     RED,
     BLUE
   };

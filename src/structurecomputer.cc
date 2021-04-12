@@ -77,9 +77,11 @@ Point StructureComputer::computeStructure() {
     throw std::runtime_error("At least 2 CameraBundle objects are needed for structure computation.");
   }
 
-  // Fill in below the required steps to calculate the 3D position of the
+  // ******************************************************************************
+  // Fill in here the required steps to calculate the 3D position of the
   // feature point and its covariance.  Put these respectively in
   // point_.rXIHat and point_.Px
+  // ******************************************************************************
 
   return point_;
 }

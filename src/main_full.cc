@@ -100,10 +100,10 @@ int main(int argc, char** argv) {
       balloonFinder.findBalloons(&image, imd.RCI(), imd.rc_I(), &bundles, &colors);
       for(size_t ii = 0; ii < bundles.size(); ii++) {
         switch(colors[ii]) {
-        case BalloonFinder::RED:
+        case BalloonFinder::BalloonColor::RED:
           structureComputerRed.push(bundles[ii]);
           break;
-        case BalloonFinder::BLUE:
+        case BalloonFinder::BalloonColor::BLUE:
           structureComputerBlue.push(bundles[ii]);
           break;
         default:

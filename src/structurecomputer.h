@@ -23,7 +23,7 @@ struct CameraBundle {
   Eigen::Matrix3d RCI;
   // 3x1 position of the camera center at the instant the image was taken,
   // expressed in the I frame in meters.
-  Eigen::Vector3d rc;
+  Eigen::Vector3d rc_I;
   // Macro that ensures proper aligment of Eigen objects in struct
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };

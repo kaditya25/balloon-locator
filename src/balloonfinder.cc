@@ -51,7 +51,7 @@ Eigen::Vector3d BalloonFinder::eCB_calibrated() const {
 bool BalloonFinder::
 findBalloonsOfSpecifiedColor(const cv::Mat* image,
                              const Eigen::Matrix3d RCI,
-                             const Eigen::Vector3d rc,
+                             const Eigen::Vector3d rc_I,
                              const BalloonFinder::BalloonColor color,
                              std::vector<Eigen::Vector2d>* rxVec) {
   using namespace cv;
@@ -76,11 +76,11 @@ findBalloonsOfSpecifiedColor(const cv::Mat* image,
     Eigen::Vector2d xc_pixels;
     Scalar trueProjectionColor;
     if(color == BalloonColor::BLUE) {
-      xc_pixels = backProject(RCI,rc,blueTrue_I_);
+      xc_pixels = backProject(RCI,rc_I,blueTrue_I_);
       trueProjectionColor = Scalar(255,0,0);
     }
     else {
-      xc_pixels = backProject(RCI,rc,redTrue_I_);
+      xc_pixels = backProject(RCI,rc_I,redTrue_I_);
       trueProjectionColor = Scalar(0,0,255);
     }
     Point2f center;
@@ -96,7 +96,7 @@ findBalloonsOfSpecifiedColor(const cv::Mat* image,
 void BalloonFinder::
 findBalloons(const cv::Mat* image,
              const Eigen::Matrix3d RCI,
-             const Eigen::Vector3d rc,
+             const Eigen::Vector3d rc_I,
              std::vector<std::shared_ptr<const CameraBundle>>* bundles,
              std::vector<BalloonColor>* colors) {
 
@@ -119,11 +119,11 @@ findBalloons(const cv::Mat* image,
   std::vector<BalloonColor> candidateColors = {BalloonColor::RED, BalloonColor::BLUE};
   for(auto color : candidateColors) {
     std::vector<Eigen::Vector2d> rxVec;
-    if(findBalloonsOfSpecifiedColor(&undistortedImage,RCI,rc,color,&rxVec)) {
+    if(findBalloonsOfSpecifiedColor(&undistortedImage,RCI,rc_I,color,&rxVec)) {
       for(const auto& rx : rxVec) {
         std::shared_ptr<CameraBundle> cb = std::make_shared<CameraBundle>();
         cb->RCI = RCI;
-        cb->rc = rc;
+        cb->rc_I = rc_I;
         cb->rx = rx;
         bundles->push_back(cb);
         colors->push_back(color);

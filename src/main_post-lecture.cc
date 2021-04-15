@@ -9,17 +9,27 @@
 
 int main(int argc, char** argv) {
 
-  // Construct and manipulate Eigen objects
-  Eigen::VectorXd b, x;
-  Eigen::MatrixXd A;
-  b.resize(3,1);
-  b(0) = 4;
-  b(1) = 10;
-  A.resize(3,3);
-  A << 1, 2, 3, 4, 5, 6, 7, 8, 9;
-  // Solve an equation of the form b = A*x for x
-  x = A.colPivHouseholderQr().solve(b);
-  std::cout << "The solution is \n" << x << std::endl;
+  // Demonstrate least squares solution based on a measurement model of the
+  // form z = Hr*x + w, with R = E[w*w'] being the measurement noise
+  // covariance matrix.
+  constexpr size_t nx = 3;
+  constexpr size_t nz = 4;
+  Eigen::VectorXd z(nz), xHat(nx);
+  Eigen::MatrixXd Hr(nz,nx), R(nz,nz);
+  // Fill in z, Hr, and R with example values
+  z << 4, 10, 6, 5;
+  Hr << 1, 0, 3,
+        0, 2, 6,
+        0, 0, 0,
+        0, 0, 1e-6;
+  R = 3*Eigen::MatrixXd::Identity(nz, nz);
+  Eigen::MatrixXd Rinv = R.inverse();
+  // This is the straightforward way to solve the the normal equations:
+  xHat = (Hr.transpose() * Rinv * Hr).inverse() * (Hr.transpose() * Rinv * z);
+  std::cout << "The straightforward solution is \n" << xHat << std::endl;
+  // This method is similar but more numerically stable:
+  xHat = (Hr.transpose() * Rinv * Hr).ldlt().solve(Hr.transpose() * Rinv * z);
+  std::cout << "The ldlt-based solution is \n" << xHat << std::endl;
 
   // Create an instance of a StructureComputer object
   StructureComputer structureComputer;
@@ -30,7 +40,7 @@ int main(int argc, char** argv) {
   // Fill cb1's and cb2's data members with example contents.  
   cb1->rx << 23, 56;
   cb1->RCI.fill(3);
-  cb1->rc(0) = 1;  cb1->rc(1) = 0.4;
+  cb1->rc_I(0) = 1;  cb1->rc_I(1) = 0.4;
   // Clear out structureComputer
   structureComputer.clear();
   // Push cb1 and cb2 to structureComputer

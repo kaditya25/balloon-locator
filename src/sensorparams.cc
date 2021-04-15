@@ -18,5 +18,6 @@ SensorParams::SensorParams() {
          0, f_, cy_,
          0, 0,  1;
   distortionCoeffs_ << -0.0217226, 0, 0, 0, 0;
-  Rc_ << 20*20,0,20*20,0;
+  Rc_ << 20*20,     0,
+             0, 20*20;
 }

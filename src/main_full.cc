@@ -117,6 +117,10 @@ int main(int argc, char** argv) {
     Point pRed = structureComputerRed.computeStructure();
     std::cout << "\nBlue balloon 3D location: \n" << pBlue.rXIHat << std::endl;
     std::cout << "Red balloon 3D location: \n" << pRed.rXIHat << std::endl;
+    std::cout << "Blue solution covariance matrix sqrt diagonal: \n" <<
+      pBlue.Px.diagonal().cwiseSqrt() << std::endl;
+    std::cout << "Red solution covariance matrix sqrt diagonal: \n" <<
+      pRed.Px.diagonal().cwiseSqrt() << std::endl;
 
     if(calibrationEnabled) {
     // Output calibrated eCB

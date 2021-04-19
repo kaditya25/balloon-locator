@@ -35,16 +35,14 @@ bool touchesEdge(const cv::Mat& image,
 Eigen::Vector3d BalloonFinder::eCB_calibrated() const {
 
   using namespace Eigen;
-  SensorParams sp;
+  const SensorParams sp;
   const size_t N = V_.cols();
   if(N < 2 || !calibrationEnabled_) {
-    return MatrixXd::Identity(3,3);
+    return Vector3d::Zero();
   }
-  MatrixXd aVec = MatrixXd::Ones(N,1);
-  Matrix3d dRCB = navtbx::wahbaSolver(aVec,W_,V_);
-  Matrix3d RCB = navtbx::euler2dc(sp.eCB());
-  std::cout << "Calibration correction deCB (deg): "
-            << navtbx::dc2euler(dRCB).transpose()*180/PI << std::endl;
+  const VectorXd aVec = VectorXd::Ones(N);
+  const Matrix3d dRCB = navtbx::wahbaSolver(aVec,W_,V_);
+  const Matrix3d RCB = navtbx::euler2dc(sp.eCB());
   return navtbx::dc2euler(dRCB*RCB);
 }
 

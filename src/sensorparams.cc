@@ -6,8 +6,10 @@ SensorParams::SensorParams() {
     0.0472,  0.0472;
   eAB_ << 0, 0, PI;
   rc_  <<  0.1159, -0.0004, -0.0435;
-  // Calibrated values for eCB
-  eCB_ << 125*PI/180, 0*PI/180, 85*PI/180;
+  // Calibrated values for eCB.  Note that because asin produces values on the
+  // range [-pi/2, pi/2], the Euler representation will be preserved so long
+  // as phi (the first element in eCB_) is within this range.  
+  eCB_ << 54.65*PI/180, -175.64*PI/180, -99.07*PI/180;
   pixelSize_ = 2e-6;
   f_ = pixelSize_*1657.72;
   imageWidthPixels_ = 3840;

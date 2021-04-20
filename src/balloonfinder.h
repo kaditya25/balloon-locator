@@ -38,17 +38,17 @@ public:
                     std::vector<std::shared_ptr<const CameraBundle>>* bundles,
                     std::vector<BalloonColor>* colors);
   // Takes in a pointer to an image and a specified balloon color and returns
-  // true if a balloon or multiple balloons of that color were found in the
+  // true if a balloon or multiple balloons of that color are found in the
   // image.  The centers of the found balloons are returned in rxVec, in
   // pixels. Note that the coordinates in rxVec are expressed in the camera's
-  // image plane coordinate system, which has the x axis pointing to the
-  // *left* as seen from the camera center out through the image plane, and y
-  // axis pointing up.  Returns false if no balloons of the specified color
-  // were found.  RCI and rc_I are input for debugging purposes.  The input
-  // RCI is the 3x3 attitude matrix relating the C and I frames at the instant
-  // the input image was taken.  The input rc_I is the 3x1 position of the
-  // camera center at the instant the image was taken, expressed in the I
-  // frame in meters.
+  // image plane coordinate system, whose origin is located at the lower-right
+  // of the image, whose x axis points *left* as seen from the camera center
+  // out through the image plane, and whose y axis points up.  Returns false
+  // if no balloons of the specified color were found.  RCI and rc_I are input
+  // for debugging and calibration purposes.  The input RCI is the 3x3
+  // attitude matrix relating the C and I frames at the instant the input
+  // image was taken.  The input rc_I is the 3x1 position of the camera center
+  // at the instant the image was taken, expressed in the I frame in meters.
   bool findBalloonsOfSpecifiedColor(const cv::Mat* image,
                                     const Eigen::Matrix3d RCI,
                                     const Eigen::Vector3d rc_I,

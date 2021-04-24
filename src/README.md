@@ -1,4 +1,7 @@
-# Source File Description
+# Source File Notes
+
+Students need only to modify the indicated functions in `structurecomputer.cc` and
+`ballonfinder.cc`.
 
 ## main_pre-lecture.cc
 `main` function prior to lecture

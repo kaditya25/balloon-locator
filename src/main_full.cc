@@ -28,9 +28,12 @@ int main(int argc, char** argv) {
   po::options_description desc("Allowed options");
   desc.add_options()
     ("help,h", "produce help message")
-    ("images,i", po::value<std::string>(&imageDirectory), "directory where images are located")
-    ("debug,d", po::bool_switch(&debuggingEnabled), "enable interactive debugging")
-    ("calibrate,c", po::bool_switch(&calibrationEnabled), "enable calibration of camera extrinsics")
+    ("images,i", po::value<std::string>(&imageDirectory),
+     "directory where images are located")
+    ("debug,d", po::bool_switch(&debuggingEnabled),
+     "enable interactive debugging")
+    ("calibrate,c", po::bool_switch(&calibrationEnabled),
+     "enable calibration of camera extrinsics")
     ;
   po::variables_map vm;
   po::store(po::parse_command_line(argc,argv,desc),vm);
@@ -55,7 +58,8 @@ int main(int argc, char** argv) {
   }
   else {
     std::cerr <<
-      "Error: Could not find specified directory where images are located." << std::endl;
+      "Error: Could not find specified directory where images are located."
+              << std::endl;
     return EXIT_FAILURE;
   }
   std::sort(imageFilenameVec.begin(), imageFilenameVec.end());
@@ -115,16 +119,20 @@ int main(int argc, char** argv) {
     // Estimate 3D location of feature. 
     Point pBlue = structureComputerBlue.computeStructure();
     Point pRed = structureComputerRed.computeStructure();
-    std::cout << "\nBlue balloon 3D location: \n" << pBlue.rXIHat << std::endl;
-    std::cout << "Red balloon 3D location: \n" << pRed.rXIHat << std::endl;
-    std::cout << "Blue solution covariance matrix sqrt diagonal: \n" <<
+    std::cout << "\nBlue balloon estimated 3D location error: \n"
+              << pBlue.rXIHat - blueTrue_I << std::endl;
+    std::cout << "Red balloon estimated 3D location error: \n"
+              << pRed.rXIHat - redTrue_I << std::endl;
+    std::cout << "Blue error covariance matrix sqrt diagonal: \n" <<
       pBlue.Px.diagonal().cwiseSqrt() << std::endl;
-    std::cout << "Red solution covariance matrix sqrt diagonal: \n" <<
+    std::cout << "Red error covariance matrix sqrt diagonal: \n" <<
       pRed.Px.diagonal().cwiseSqrt() << std::endl;
 
     if(calibrationEnabled) {
-    // Output calibrated eCB
-      std::cout << "eCB_calibrated (deg): " << balloonFinder.eCB_calibrated().transpose()*180/PI << std::endl;
+      // Output calibrated eCB
+      const Eigen::Vector3d eCB_rad = balloonFinder.eCB_calibrated();
+      std::cout << "eCB_calibrated (deg): "
+                << eCB_rad.transpose()*180/PI << std::endl;
     }
   }
   catch(std::exception& e) {

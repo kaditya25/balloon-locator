@@ -38,21 +38,22 @@ struct Point {
 };
 
 class StructureComputer {
-public:
+ public:
   // Constructor: gets called when an instance of StructureComputer is created
   StructureComputer() {}
   // Destructor: gets called when an instance of StructureComputer is destroyed
   ~StructureComputer() {}
   // Clears out contents; puts StructureComputer instance in initial state
   void clear();
-  // Add another CameraBundle object to those from which structure will be computed
+  // Add another CameraBundle object to those from which structure will be
+  // computed
   void push(std::shared_ptr<const CameraBundle> bundle);
   // Computes a Point from all CameraBundle objects that have been pushed
   Point computeStructure();
   // Returns a copy of the stored Point object
   Point point() { return point_; }
-  
-private:
+
+ private:
   SensorParams sensorParams_;
   // The Point object estimated from the CameraBundle objects in bundleVec_
   Point point_;

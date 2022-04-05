@@ -26,13 +26,14 @@ int main(int argc, char** argv) {
   bool debuggingEnabled = false;
   bool calibrationEnabled = false;
   po::options_description desc("Allowed options");
-  desc.add_options()("help,h", "produce help message")(
-      "images,i", po::value<std::string>(&imageDirectory),
-      "directory where images are located")("debug,d",
-                                            po::bool_switch(&debuggingEnabled),
-                                            "enable interactive debugging")(
-      "calibrate,c", po::bool_switch(&calibrationEnabled),
-      "enable calibration of camera extrinsics");
+  desc.add_options()
+    ("help,h", "produce help message")
+    ("images,i", po::value<std::string>(&imageDirectory),
+     "directory where images are located")
+    ("debug,d", po::bool_switch(&debuggingEnabled),
+     "enable interactive debugging")
+    ("calibrate,c", po::bool_switch(&calibrationEnabled),
+     "enable calibration of camera extrinsics");
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   po::notify(vm);

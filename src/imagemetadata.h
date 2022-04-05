@@ -10,9 +10,9 @@
 // Stores and manipulates the metadata associated with each image, such as
 // camera pose.
 class ImageMetadata {
-public:
+ public:
   // Default constructor
-  ImageMetadata(void){}
+  ImageMetadata(void) {}
   // Constructor that populates data members from a single line of metadata file
   ImageMetadata(std::string line);
   // Returns filename
@@ -29,17 +29,17 @@ public:
   // Returns the 3x3 attitude matrix relating the A and I frames at the
   // instant the image was taken.
   Eigen::Matrix3d RAI() const;
-  Eigen::MatrixXd q_AI() const {return q_AI_;}
-  
-private:
+  Eigen::MatrixXd q_AI() const { return q_AI_; }
+
+ private:
   // Image filename
   std::string filename_;
   // Position of primary antenna in I frame (local ENU frame), in meters
   Eigen::Vector3d rP_I_;
   // Quaternion relating antenna plate frame and I (local ENU) frame
-  Eigen::Matrix<double,4,1> q_AI_;
+  Eigen::Matrix<double, 4, 1> q_AI_;
   // Time stamp of image in Snapdragon system time: the first element is
-  // seconds and the second is nanoseconds.  
+  // seconds and the second is nanoseconds.
   std::pair<unsigned int, unsigned int> tImage_;
   // Time stamp of camera pose in Snapdragon system time: the first element is
   // seconds and the second is nanoseconds.

@@ -2,19 +2,16 @@
 #define __BALLOON_FINDER_H
 
 #include <Eigen/Dense>
-#include <opencv2/opencv.hpp>
 #include <cstdlib>
 #include <memory>
+#include <opencv2/opencv.hpp>
 
 #include "sensorparams.h"
 #include "structurecomputer.h"
 
 class BalloonFinder {
-public:
-  enum class BalloonColor {
-    RED,
-    BLUE
-  };
+ public:
+  enum class BalloonColor { RED, BLUE };
   // Constructor: gets called when an instance of BalloonFinder is created
   BalloonFinder(bool debuggingEnabled, bool calibrationEnabled,
                 const Eigen::Vector3d& blueTrue_I,
@@ -32,8 +29,7 @@ public:
   // camera center at the instant the image was taken, expressed in the I
   // frame in meters.  RCI and rc_I are input so that the corresponding values
   // in each output CameraBundle can be populated.
-  void findBalloons(const cv::Mat* image,
-                    const Eigen::Matrix3d RCI,
+  void findBalloons(const cv::Mat* image, const Eigen::Matrix3d RCI,
                     const Eigen::Vector3d rc_I,
                     std::vector<std::shared_ptr<const CameraBundle>>* bundles,
                     std::vector<BalloonColor>* colors);
@@ -61,7 +57,7 @@ public:
   // Euler angles corresponding to RCB_calibrated.
   Eigen::Vector3d eCB_calibrated() const;
 
-private:
+ private:
   SensorParams sensorParams_;
   // Indicates whether interactive debugging is enabled
   bool debuggingEnabled_;

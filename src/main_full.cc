@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
   std::ifstream metadata(imageDirectory + "/metadata.log");
   if (!metadata.is_open()) {
     std::cerr << "Error: A metadata file named metadata.log is expected"
-              << "to be found in the input directory." << std::endl;
+              << " to be found in the input directory." << std::endl;
     return EXIT_FAILURE;
   }
   std::map<std::string, ImageMetadata> imageMetadataMap;

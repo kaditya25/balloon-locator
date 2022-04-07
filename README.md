@@ -24,9 +24,10 @@ tar xf easy-ones.tar
 ```
 
 ## Execute
-The initial version of the `locateBalloon` executable, which after the build
-process is located in the `exe` directory, requires one input: the path to an
-image to display.  Run the executable as follows:
+The initial version of the `locateBalloon` executable (with `main.cc` copied
+from `main_post-lecture.cc`), which after the build process is located in the
+`exe` directory, requires one input: the path to an image to display.  Run the
+executable as follows:
 ```bash
 cd exe
 ./locateBalloon ../images/easy-ones/frame00090.jpg
@@ -51,8 +52,9 @@ at the end of the execution command:
 ./locateBalloon -i ../images/easy-ones -d
 ```
 
-The `opencv_demo` executable, which after the build process is located in
-the `exe` directory, can be run as follows:
+The `opencv_demo` executable (with `opencv-lecture/main.cc` copied from
+`opencv-lecture/main_post-lecture.cc`), which after the build process is located
+in the `exe` directory, can be run as follows:
 ```bash
 cd opencv-lecture
 ../exe/opencv_demo

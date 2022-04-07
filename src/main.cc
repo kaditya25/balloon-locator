@@ -44,8 +44,8 @@ int main(int argc, char** argv) {
   structureComputer.push(cb1);
   structureComputer.push(cb2);
   // Estimate 3D location of feature.  The try and catch blocks are for
-  // exception handling -- they handle any errors that might be thrown during
-  // a call to computeStructure().  You can use this to cover any portion of
+  // exception handling -- they handle any errors that might be thrown during a
+  // call to computeStructure().  You can use this to protect any portion of
   // your code in main.cc.
   try {
     Point p1 = structureComputer.computeStructure();

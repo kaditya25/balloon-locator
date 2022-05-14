@@ -69,6 +69,87 @@ bool BalloonFinder::findBalloonsOfSpecifiedColor(
   // coordinates.  You can push rx onto rxVec as follows: rxVec->push_back(rx)
   //
   // *************************************************************************
+  cvtColor(framep, framep, COLOR_BGR2HSV);
+  switch(color)
+  {
+    case BalloonFinder::BalloonColor::RED:
+    {
+      std::cout << "Looking for RED" << std::endl;
+      Scalar colorLower_l(0,80,100), colorLower_h(10,255,255);
+      Scalar colorUpper_l(170,80,100), colorUpper_h(180,255,255);
+      Mat mLower, mUpper;
+      inRange(framep, colorLower_l, colorLower_h, mLower);
+      inRange(framep, colorUpper_l, colorUpper_h, mUpper);
+      framep = mLower | mUpper;
+    }
+      break;
+    case BalloonFinder::BalloonColor::BLUE:
+    {
+      std::cout << "Looking for BLUE" << std::endl;
+      Scalar color_l(90,120,100), color_h(102,240,255);
+      inRange(framep, color_l, color_h, framep);
+    }
+      break;
+  }
+
+  // Erode image to eliminate stray wisps of color
+  constexpr int iterations = 5;
+  erode(framep, framep, Mat(), cv::Point(-1,-1), iterations);
+  // Dilate image to restore balloon to original size
+  dilate(framep, framep, Mat(), cv::Point(-1,-1), iterations);
+  // Find contours
+  std::vector<std::vector<cv::Point>> contours;
+  std::vector<Vec4i> hierarchy;
+  findContours(framep, contours, hierarchy, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+  // Loop through the contours.  Bound each contour by a minimum enclosing 
+  // circle.  If the enclosing circle is large enough, then push to rxVec and 
+  // set returnVal = true.
+  RNG rng(12345);
+  Point2f center;
+  float radius;
+  constexpr float minAspectRatio = 1.2;
+  constexpr float maxAspectRatio = 1.55;
+  constexpr float minRadius = 35;
+  constexpr int minPointsFor_fitEllipse = 5;
+  std::vector<float> radii_dbg;
+  std::vector<Point2f> center_dbg;
+  for (size_t ii = 0; ii < contours.size(); ii++) {
+    const Scalar color = Scalar(rng.uniform(0, 256), rng.uniform(0, 256),
+                                rng.uniform(0, 256));
+    minEnclosingCircle(contours[ii], center, radius);
+    float aspectRatio = minAspectRatio;
+    if (contours[ii].size() >= minPointsFor_fitEllipse) {
+      RotatedRect boundingRectangle = fitEllipse(contours[ii]);
+      const Size2f rectSize = boundingRectangle.size;
+      aspectRatio = static_cast<float>(std::max(rectSize.width, rectSize.height))/
+        std::min(rectSize.width, rectSize.height);
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    if ( aspectRatio > minAspectRatio && aspectRatio < maxAspectRatio && radius > minRadius) 
+    {
+      std::vector<Point2f> approx; 
+      const double peri = cv::arcLength(contours[ii], true);
+      cv::approxPolyDP(contours[ii], approx, 0.01*peri, true);
+      // cv::approxPolyDP(contours[ii], approx, peri/4, true);
+      double area = cv::contourArea(contours[ii]);
+      // std::cout<< "Number of approx = " << apprSox.size() << std::endl;
+      // std::cout << "area " << area << std::endl;
+      if (approx.size() > 2 && approx.size() < 15 && area > 5000)
+      {
+        std::cout<< "Number of vertices = " << approx.size() << std::endl;
+        std::cout << "radius: " << radius << std::endl;
+        std::cout << "Aspect ratio: " << aspectRatio << std::endl;
+        std::cout << "area " << area << std::endl;
+        
+        Eigen::Vector2d circle_center;
+        circle_center << nCols_m1 - center.x, nRows_m1 - center.y;
+        rxVec->push_back(circle_center);
+        center_dbg.push_back(center);
+        radii_dbg.push_back(radius);
+        returnValue = true;
+      }      
+    }
+  }
 
   // The debugging section below plots the back-projection of true balloon 3d
   // location on the original image.  The balloon centers you find should be
@@ -87,6 +168,7 @@ bool BalloonFinder::findBalloonsOfSpecifiedColor(
       xc_pixels = backProject(RCI, rc_I, redTrue_I_);
       trueProjectionColor = Scalar(0, 0, 255);
     }
+
     Point2f center;
     // The image plane coordinate system, in which xc_pixels is expressed, has
     // its origin at the lower-right of the image, x axis pointing left and y
@@ -100,6 +182,13 @@ bool BalloonFinder::findBalloonsOfSpecifiedColor(
     center.x = nCols_m1 - xc_pixels(0);
     center.y = nRows_m1 - xc_pixels(1);
     circle(original, center, 20, trueProjectionColor, FILLED);
+
+    for (int i = 0; i < center_dbg.size(); i++){
+      Scalar pred_color(Scalar(0,255,0));
+      circle(original, center_dbg[i], 20, pred_color, FILLED);
+      circle(original, center_dbg[i], static_cast<int>(radii_dbg[i]), pred_color, 2);
+    }
+  
     namedWindow("Display", WINDOW_NORMAL);
     resizeWindow("Display", 1000, 1000);
     imshow("Display", original);
